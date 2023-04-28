@@ -57,5 +57,3 @@ describe("Logging in to system", () => {
         })
     })
 });
-
-//cy.get('li.todo-item').contains(`${todoItem}`).parent().find('span.checker').click();
