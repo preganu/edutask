@@ -1,28 +1,33 @@
-const newUser = "sampleuser@email.net";
-const todoItem = "Watch it again";
-
 describe("Logging in to system", () => {
-    beforeEach(function(){
-        cy.visit("localhost:3000");
-        cy.get("[id=email]").type(`${newUser}{enter}`);
-        
-        //Login or create the new user
-        cy.get('h1').then(($h1) => {
-            if($h1.text().includes("Your tasks,")){
-                cy.log("User already exists");
-            }else{
-                //Create a new user and a new task for that user
-                cy.contains("Have no account yet? Click here to sign up.").click();
-                cy.get("[id=email]").clear();
-                cy.get("[id=email]").type(`${newUser}{enter}`);
-                const newItem = "New task"
-                cy.get("[id=title]").type(`${newItem}`);
-                const itemUrl = "dQw4w9WgXcQ";
-                cy.get("[id=url]").type(`${itemUrl}{enter}`);
-            }
-            cy.contains("New task").click();
-        });
+    let uid
+    let email
+    const todoItem = "New Task"
+  
+    before(function () {
+      cy.fixture('example.json')
+        .then((user) => {
+            cy.request({
+                method: 'POST',
+                url: 'http://localhost:5000/users/create',
+                form: true,
+                body: user
+            }).then((response) => {
+                uid = response.body._id.$oid
+                email = user.email
+            })
+        })
     })
+
+    beforeEach(function() {
+        cy.visit("localhost:3000");
+        cy.get("[id=email]").type(`${email}{enter}`);
+        const newItem = "New task"
+        cy.get("[id=title]").type(`${newItem}`);
+        const itemUrl = "dQw4w9WgXcQ";
+        cy.get("[id=url]").type(`${itemUrl}{enter}`);
+    
+        cy.contains("New task").click();
+      })
     
     //Add a todo to the task
     it("Enter description into empty field", () => {
@@ -41,6 +46,15 @@ describe("Logging in to system", () => {
         cy.viewport(1024, 768);
         cy.get('input[placeholder*="Add a new todo item"]').click();
         cy.contains("Add").should('be.disabled');
+    })
+
+    after(function () {
+        cy.request({
+            method: 'DELETE',
+            url: `http://localhost:5000/users/${uid}`
+        }).then((response) => {
+            cy.log(response.body)
+        })
     })
 });
 
