@@ -74,7 +74,7 @@ function TaskDetail({ taskid, updateTasks }) {
             headers: { 'Cache-Control': 'no-cache' }
         })
             .then(res => res.json())
-            .then(updateTask())
+            .then(todoobj => updateTask())
             .then(updateTasks())
             .catch(function (error) {
                 console.error(error)
@@ -92,7 +92,7 @@ function TaskDetail({ taskid, updateTasks }) {
             headers: { 'Cache-Control': 'no-cache' }
         })
             .then(res => res.json())
-            .then(updateTask())
+            .then(todoobj => updateTask())
             .then(updateTasks())
             .catch(function (error) {
                 console.error(error)

@@ -34,7 +34,7 @@ describe("Logging in to system", () => {
       .first()
       .within(() => {
         const checker = cy.get('.todo-item').get('span').get('.checker')
-        checker.parent().find('span.checker.unchecked').click().click().should('have.class', 'checker checked')
+        checker.parent().find('span.checker.unchecked').click().should('have.class', 'checker checked')
       })
     })
 

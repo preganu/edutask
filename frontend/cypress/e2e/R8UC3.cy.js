@@ -35,7 +35,7 @@ describe("Logging in to system", () => {
         //Drop the todo
         cy.get('ul.todo-list')
         cy.get('li.todo-item').contains(`${todoItem}`).parent().find('span.remover').as('removeButton');
-        cy.get('@removeButton').click().click();
+        cy.get('@removeButton').click();
         cy.contains('ul.todo-list', `${todoItem}`).should('not.exist'); 
     })
 
